@@ -1,3 +1,6 @@
+import tkinter as tk
+from tkinter import messagebox
+
 def reverse(num):
     # Reverses the digits of a number
     rev = 0
@@ -11,22 +14,44 @@ def isPalindrome(num):
     # Checks if a number is a palindrome
     return num == reverse(num)
 
-def findLychrel(number, max_iterations=2400):
+def findLychrel(number, max_iterations=240):
     for i in range(max_iterations):
         number = number + reverse(number)
         if isPalindrome(number):
             return i + 1, number
     return max_iterations, number
 
-if __name__ == "__main__":
+def run_program():
     try:
-        input_number = int(input("Enter a natural number: "))
+        input_number = int(entry.get())
         iterations, palindrome = findLychrel(input_number)
         
-        print(f"Input number: {input_number}")
-        print(f"Is Lychrel: {iterations == 240}")
-        print(f"Iterations needed: {iterations}")
-        print(f"Palindrome number (if found): {palindrome}")
-        print(f"Last number reached: {palindrome}")
+        result_text.set(f"Input number: {input_number}\n")
+        result_text.set(result_text.get() + f"Is Lychrel: {iterations == 240}\n")
+        result_text.set(result_text.get() + f"Iterations completed: {iterations}\n")
+        if iterations == 240:
+            result_text.set(result_text.get() + f"Last number reached: {palindrome}\n")
+        else:
+            result_text.set(result_text.get() + f"Palindrome number: {palindrome}\n")
+        
     except ValueError:
-        print("Please enter a valid natural number.")
+        messagebox.showerror("Error", "Please enter a valid natural number.")
+
+# Create GUI
+root = tk.Tk()
+root.title("Lychrel Number Checker")
+
+label = tk.Label(root, text="Enter a natural number:")
+label.pack()
+
+entry = tk.Entry(root)
+entry.pack()
+
+run_button = tk.Button(root, text="Check Lychrel", command=run_program)
+run_button.pack()
+
+result_text = tk.StringVar()
+result_label = tk.Label(root, textvariable=result_text)
+result_label.pack()
+
+root.mainloop()
